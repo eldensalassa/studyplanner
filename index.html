@@ -4,8 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Material Icons for Moon and Sun -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <h1>Study Planner</h1>
+    <div class="container">
+        <h1>Study Planner</h1>
+
+        <!-- Form untuk menambahkan tugas -->
+        <form id="task-form">
+            <div class="task-container">
+                <label for="task-input" class="task-label">Task Name</label>
+                <input type="text" id="task-input" placeholder="Enter a study task" required>
+            </div>
+
+            <div class="task-container">
+                <label for="due-date" class="task-label">Due Date</label>
+                <input type="date" id="due-date" required>
+            </div>
+
+            <div class="task-container">
+                <label for="priority" class="task-label">Priority</label>
+                <select id="priority" required>
+                    <option value="" disabled selected>Priority</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+
+            <div class="task-container">
+                <label for="category" class="task-label">Category</label>
+                <input type="text" id="category" placeholder="Enter category (e.g., Math, Science)" required>
+            </div>
+
+            <div class="task-container">
+                <label for="reminder-time" class="task-label">Reminder Time</label>
+                <input type="time" id="reminder-time" placeholder="Set Reminder">
+            </div>
+
+            <div class="task-container">
+                <label for="task-progress" class="slider-label">Task Progress</label>
+                <input type="range" id="task-progress" name="task-progress" min="0" max="100" value="0">
+                <span id="progress-value">0%</span>
+            </div>
+
+            <div class="task-container">
+                <label for="task-notes" class="task-label">Task Notes</label>
+                <textarea id="task-notes" placeholder="Add any notes for the task"></textarea>
+            </div>
+
+            <div class="button-container">
+                <!-- Add Task button -->
+                <button type="submit" class="add-task-btn">Add Task</button>
+                <!-- Reset Form button -->
+                <button type="reset" class="reset-form-btn">Reset Form</button>
+            </div>
+        </form>
+
+        <!-- Daftar tugas -->
+        <div id="task-list-container">
+            <ul id="task-list"></ul>
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <div id="dark-mode-toggle" class="dark-mode-toggle">
+            <span id="dark-mode-icon" class="material-icons">dark_mode</span>
+        </div>
+
+        <!-- Export dan Import Tasks -->
+        <div id="export-import-container">
+            <button id="export-btn" class="export-btn">Export Tasks</button>
+            <label for="import-input" id="import-label">Import Tasks</label>
+            <input type="file" id="import-input" style="display: none;">
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
