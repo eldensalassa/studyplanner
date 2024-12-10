@@ -43,9 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
         li.innerHTML = `
             <div class="task-details">
                 <span class="task-name">${task.text}</span>
-                <label class="task-checkbox-container">
-                    <input type="checkbox" class="task-checkbox" ${isComplete ? 'checked' : ''} 
-                        onclick="toggleTaskComplete(${task.id}, this)" />
                     <span class="check-icon material-icons">${isComplete ? 'check_circle' : ''}</span>
                 </label>
                 <div class="task-meta">
