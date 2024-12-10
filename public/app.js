@@ -33,13 +33,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Render tasks
     function renderTasks(tasks) {
-        taskList.innerHTML = '';
-        tasks.forEach((task) => {
-            const li = document.createElement('li');
-            li.classList.add(getPriorityClass(task.priority)); // Menambahkan kelas prioritas berdasarkan task
-            li.innerHTML = `
-                <div>
-                    <strong>${task.text}</strong><br>
+    taskList.innerHTML = '';
+    tasks.forEach((task) => {
+        const li = document.createElement('li');
+        li.classList.add(getPriorityClass(task.priority)); // Add priority class to the task
+
+        const isComplete = task.progress === 100;
+
+        li.innerHTML = `
+            <div class="task-details">
+                <span class="task-name">${task.text}</span>
+                <label class="task-checkbox-container">
+                    <input type="checkbox" class="task-checkbox" ${isComplete ? 'checked' : ''} 
+                        onclick="toggleTaskComplete(${task.id}, this)" />
+                    <span class="check-icon material-icons">${isComplete ? 'check_circle' : ''}</span>
+                </label>
+                <div class="task-meta">
                     <small>Due: ${task.dueDate}</small><br>
                     <small>Priority: ${task.priority}</small><br>
                     <small>Category: ${task.category}</small><br>
@@ -47,14 +56,37 @@ document.addEventListener('DOMContentLoaded', function () {
                     <small>Progress: ${task.progress}%</small><br>
                     <small>Notes: ${task.notes || 'None'}</small>
                 </div>
-                <div>
-                    <button class="edit-btn" onclick="editTask(${task.id})">Edit</button>
-                    <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
-                </div>
-            `;
-            taskList.appendChild(li);
-        });
-    }
+            </div>
+            <div class="task-actions">
+                <button class="edit-btn" onclick="editTask(${task.id})">Edit</button>
+                <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+                <button class="complete-btn" onclick="markComplete(${task.id})">Complete</button>
+            </div>
+        `;
+        taskList.appendChild(li);
+    });
+}
+
+    // Mark task as complete
+    window.markComplete = function (id) {
+        fetch(`http://localhost:3000/tasks/${id}`)
+            .then(response => response.json())
+            .then(task => {
+                if (task.progress < 100) {
+                    task.progress = 100;
+                    fetch(`http://localhost:3000/tasks/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(task),
+                    })
+                    .then(() => fetchTasks())
+                    .catch(error => console.error('Error updating task:', error));
+                }
+            })
+            .catch(error => console.error('Error fetching task:', error));
+    };
 
     // Add new task
     taskForm.addEventListener('submit', function (e) {
